@@ -1070,6 +1070,10 @@ EOD;
             $fullname = (isset($_POST['lis_person_name_full'])) ? $_POST['lis_person_name_full'] : '';
             $this->user->setNames($firstname, $lastname, $fullname);
 
+
+            $sourceId = (isset($_POST['lis_person_sourcedid'])) ? $_POST['lis_person_sourcedid'] : '';
+            $this->user->setSourceId($sourceId);
+            
 // Set the user email
             $email = (isset($_POST['lis_person_contact_email_primary'])) ? $_POST['lis_person_contact_email_primary'] : '';
             $this->user->setEmail($email, $this->defaultEmail);

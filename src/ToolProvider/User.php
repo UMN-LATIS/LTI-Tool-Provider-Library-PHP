@@ -39,6 +39,14 @@ class User
  * @var string $email
  */
     public $email = '';
+
+/**
+ * User's source id.
+ *
+ * @var string $sourceId
+ */
+    public $sourceId = '';
+    
 /**
  * User's image URI.
  *
@@ -343,6 +351,25 @@ class User
           }
       } else {
           $this->email = '';
+      }
+
+    }
+
+/**
+ * Set the source id (from your SiS for example
+ *
+ * @param string $sourceId    Source ID
+ */
+
+
+    public function setSourceId($sourceId = null)
+    {
+
+      if (!empty($sourceId)) {
+          $this->sourceId = $sourceId;
+      } 
+      else {
+        $this->sourceId = "";
       }
 
     }
