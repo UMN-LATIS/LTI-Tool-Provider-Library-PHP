@@ -1273,7 +1273,7 @@ EOD;
     private function domnodeToArray($node)
     {
 
-        $output = '';
+        $output = array();
         switch ($node->nodeType) {
             case XML_CDATA_SECTION_NODE:
             case XML_TEXT_NODE:
