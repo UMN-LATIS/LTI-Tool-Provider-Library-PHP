@@ -623,6 +623,15 @@ EOF;
         </sourcedGUID>{$xml}
       </resultRecord>
 EOF;
+                if($ltiOutcome->date) {
+                    $xml .= <<<EOF
+        <submissionDetails>
+            <submittedAt>
+                {{$ltiOutcome->date}}
+            </submittedAt>
+        </submissionDetails>
+EOF;
+                }
                 if ($this->doLTI11Service($do, $urlLTI11, $xml)) {
                     switch ($action) {
                         case self::EXT_READ:
