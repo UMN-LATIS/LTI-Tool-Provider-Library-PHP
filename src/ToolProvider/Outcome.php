@@ -70,7 +70,6 @@ class Outcome
         $this->value = $value;
         $this->resultData = $resultData;
         $this->language = 'en-US';
-        $this->date = gmdate('c', time());
         $this->type = 'decimal';
 
     }
