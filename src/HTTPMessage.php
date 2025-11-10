@@ -66,7 +66,7 @@ class HTTPMessage
 /**
  * Request URL.
  *
- * @var url $url
+ * @var string $url
  */
     private $url = null;
 
@@ -76,6 +76,8 @@ class HTTPMessage
  * @var method $method
  */
     private $method = null;
+
+    const DEFAULT_USER_AGENT = 'LTI-Tool-Provider-Library-PHP/3.0.0 (+https://github.com/IMSGlobal/LTI-Tool-Provider-Library-PHP)';
 
 /**
  * Class constructor.
@@ -110,13 +112,14 @@ class HTTPMessage
     {
 
         $this->ok = false;
+        $preparedHeaders = $this->ensureUserAgentHeader();
 // Try using curl if available
         if (function_exists('curl_init')) {
             $resp = '';
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $this->url);
-            if (!empty($this->requestHeaders)) {
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $this->requestHeaders);
+            if (!empty($preparedHeaders)) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $preparedHeaders);
             } else {
                 curl_setopt($ch, CURLOPT_HEADER, 0);
             }
@@ -157,8 +160,8 @@ class HTTPMessage
             $opts = array('method' => $this->method,
                           'content' => $this->request
                          );
-            if (!empty($this->requestHeaders)) {
-                $opts['header'] = $this->requestHeaders;
+            if (!empty($preparedHeaders)) {
+                $opts['header'] = $preparedHeaders;
             }
             try {
                 $ctx = stream_context_create(array('http' => $opts));
@@ -173,6 +176,31 @@ class HTTPMessage
         }
 
         return $this->ok;
+
+    }
+
+    private function getDefaultUserAgent()
+    {
+
+        $components = array(self::DEFAULT_USER_AGENT, 'PHP/' . PHP_VERSION);
+        if (function_exists('curl_version')) {
+            $curlInfo = curl_version();
+            if (!empty($curlInfo['version'])) {
+                $components[] = 'curl/' . $curlInfo['version'];
+            }
+        }
+
+        return implode(' ', $components);
+
+    }
+
+    private function ensureUserAgentHeader()
+    {
+
+        $userAgentHeader = 'User-Agent: ' . $this->getDefaultUserAgent();
+        $this->requestHeaders = array($userAgentHeader);
+
+        return $this->requestHeaders;
 
     }
 
